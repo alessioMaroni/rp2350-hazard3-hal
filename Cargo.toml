@@ -1,6 +1,6 @@
 [package]
 name = "rp2350-hazard3-hal"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Alessio Maroni <alessiomaronidev@gmail.com>"]
 edition = "2024"
 description = "Bare-metal MISRA C compliant HAL (Hardware Abstraction Layer) for RP2350 Hazard3 RISC-V"

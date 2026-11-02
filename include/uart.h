@@ -20,12 +20,21 @@
  * SECTION: 2.2.4, page 32
  * @{
  */
+#define CLOCKS_BASE_ADDR		0x40010000UL /**< CLOCK_BASE eripheral base address */
 #define RESETS_BASE_ADDR		0x40020000UL /**< RESETS peripheral base address */
 #define IO_BANK0_BASE_ADDR		0x40028000UL /**< IO_BANK0 peripheral base address */
 #define PADS_BANK0_BASE_ADDR	0x40038000UL /**< PADS_BANK0 peripheral base address */
 #define UART0_BASE_ADDR			0x40070000UL /**< UART0 peripheral base address */
 #define UART1_BASE_ADDR			0x40078000UL /**< UART1 peripheral base address */
 /** @} */
+
+/**
+ * @brief System Clock Control Layout (CLOCKS).
+ */
+typedef struct {
+    uint32_t reserved[18];        /**< 0x00 - 0x44: Reserved registers */
+    volatile uint32_t CLK_PERI_CTRL; /**< 0x48: Peripheral clock control register */
+} CLOCKS_Regs_t;
 
 /**
  * @name Atomic Bit Manipulation Offsets
@@ -69,8 +78,8 @@
  * @brief Subsystem Reset Control Register Layout (RESETS).
  */
 typedef struct {
-	volatile uint32_t RESET;	/**< 0x00: Reset control register */
-	volatile uint32_t WDSEL;	/**< 0x04: Watchdog reset select */
+	volatile uint32_t RESET;		/**< 0x00: Reset control register */
+	volatile uint32_t WDSEL;		/**< 0x04: Watchdog reset select */
 	volatile uint32_t RESET_DONE;	/**< 0x08: Reset done status register */
 } RESETS_Regs_t;
 
@@ -88,8 +97,8 @@ typedef struct {
  * @brief Pad Control Bank 0 Register Layout (PADS_BANK0).
  */
 typedef struct {
-	volatile uint32_t VOLTAGE_SELECT; /**< 0x00: Voltage select register */
-	volatile uint32_t PAD[30];	  /**< Pad electrical configuration registers */
+	volatile uint32_t VOLTAGE_SELECT; 	/**< 0x00: Voltage select register */
+	volatile uint32_t PAD[30];	  		/**< Pad electrical configuration registers */
 } PADS_BANK0_Regs_t;
 
 /**
@@ -97,23 +106,23 @@ typedef struct {
  * SECTION: 12.1.8, page 972
  */
 typedef struct {
-	volatile uint32_t UARTDR;	 /**< 0x000: Data Register */
-	volatile uint32_t UARTRSR;	 /**< 0x004: Receive Status / Error Clear Register */
-	uint32_t reserved0[4];		 /**< 0x008 - 0x014: Reserved space */
-	volatile uint32_t UARTFR;	 /**< 0x018: Flag Register */
-	uint32_t reserved1;		 /**< 0x01C: Reserved space */
-	volatile uint32_t UARTILPR;	 /**< 0x020: IrDA Low-Power Counter Register */
-	volatile uint32_t UARTIBRD;	 /**< 0x024: Integer Baud Rate Register */
-	volatile uint32_t UARTFBRD;	 /**< 0x028: Fractional Baud Rate Register */
-	volatile uint32_t UARTLCR_H;	 /**< 0x02C: Line Control Register */
-	volatile uint32_t UARTCR;	 /**< 0x030: Control Register */
-	volatile uint32_t UARTIFLS;	 /**< 0x034: Interrupt FIFO Level Select Register */
-	volatile uint32_t UARTIMSC;	 /**< 0x038: Interrupt Mask Set/Clear Register */
-	volatile uint32_t UARTRIS;	 /**< 0x03C: Raw Interrupt Status Register */
-	volatile uint32_t UARTMIS;	 /**< 0x040: Masked Interrupt Status Register */
-	volatile uint32_t UARTICR;	 /**< 0x044: Interrupt Clear Register */
-	volatile uint32_t UARTDMACR;	 /**< 0x048: DMA Control Register */
-	uint32_t reserved2[997];	 /**< 0x04C - 0x0FDC: Reserved space */
+	volatile uint32_t UARTDR;	 	/**< 0x000: Data Register */
+	volatile uint32_t UARTRSR;	 	/**< 0x004: Receive Status / Error Clear Register */
+	uint32_t reserved0[4];		 	/**< 0x008 - 0x014: Reserved space */
+	volatile uint32_t UARTFR;	 	/**< 0x018: Flag Register */
+	uint32_t reserved1;		 		/**< 0x01C: Reserved space */
+	volatile uint32_t UARTILPR;	 	/**< 0x020: IrDA Low-Power Counter Register */
+	volatile uint32_t UARTIBRD;	 	/**< 0x024: Integer Baud Rate Register */
+	volatile uint32_t UARTFBRD;	 	/**< 0x028: Fractional Baud Rate Register */
+	volatile uint32_t UARTLCR_H;	/**< 0x02C: Line Control Register */
+	volatile uint32_t UARTCR;	 	/**< 0x030: Control Register */
+	volatile uint32_t UARTIFLS;	 	/**< 0x034: Interrupt FIFO Level Select Register */
+	volatile uint32_t UARTIMSC;	 	/**< 0x038: Interrupt Mask Set/Clear Register */
+	volatile uint32_t UARTRIS;	 	/**< 0x03C: Raw Interrupt Status Register */
+	volatile uint32_t UARTMIS;	 	/**< 0x040: Masked Interrupt Status Register */
+	volatile uint32_t UARTICR;	 	/**< 0x044: Interrupt Clear Register */
+	volatile uint32_t UARTDMACR;	/**< 0x048: DMA Control Register */
+	uint32_t reserved2[997];	 	/**< 0x04C - 0x0FDC: Reserved space */
 	volatile uint32_t UARTPERIPHID0; /**< 0xFE0: Peripheral ID Register 0 */
 	volatile uint32_t UARTPERIPHID1; /**< 0xFE4: Peripheral ID Register 1 */
 	volatile uint32_t UARTPERIPHID2; /**< 0xFE8: Peripheral ID Register 2 */
@@ -128,6 +137,7 @@ typedef struct {
  * @name Peripheral Access Instances
  * @{
  */
+#define CLOCKS      ((CLOCKS_Regs_t *)(uintptr_t)CLOCKS_BASE_ADDR)
 #define RESETS		((RESETS_Regs_t *)(uintptr_t)RESETS_BASE_ADDR)
 #define RESETS_SET	((RESETS_Regs_t *)(uintptr_t)(RESETS_BASE_ADDR | ATOMIC_SET_OFFSET))
 #define RESETS_CLR	((RESETS_Regs_t *)(uintptr_t)(RESETS_BASE_ADDR | ATOMIC_CLR_OFFSET))
@@ -141,40 +151,46 @@ typedef struct {
  * @name UART Configuration Constants (115200 Baud @ 12 MHz clk_peri)
  * @{
  */
-#define UART_IBAUD	6U					/**< Integer divisor part */
-#define UART_FBAUD	33U					/**< Fractional divisor part */
+#define UART_IBAUD	6U								/**< Integer divisor part */
+#define UART_FBAUD	33U								/**< Fractional divisor part */
 #define UART_8N1	((uint32_t)3U << 5U)			/**< 8 data bits, no parity, 1 stop bit */
 #define UART_FIFO	((uint32_t)1U << 4U)			/**< Enable hardware FIFOs */
 #define UART_ENABLE	(((uint32_t)1U << 9U) | \
 			 ((uint32_t)1U << 8U) | \
-			 ((uint32_t)1U << 0U))			/**< Control bitmask: RXE | TXE | UARTEN */
+			 ((uint32_t)1U << 0U))					/**< Control bitmask: RXE | TXE | UARTEN */
 /** @} */
 
 /**
  * @name Subsystem Reset and GPIO Multiplexing Masks (RP2350 Architecture)
  * @{
  */
-#define RESETS_RESET_UART0_BIT	((uint32_t)1U << 28U)	/**< RP2350 UART0 reset bit position (Bit 28) */
-#define RESETS_IO_BANK0_BIT	((uint32_t)1U << 6U)	/**< RP2350 IO_BANK0 reset bit position (Bit 6) */
-#define RESETS_PADS_BANK0_BIT	((uint32_t)1U << 10U)	/**< RP2350 PADS_BANK0 reset bit position (Bit 10) */
-#define GPIO_FUNC_UART		2U			/**< GPIO multiplexer function 2 (UART) */
+#define CLK_PERI_ENABLE_BIT     ((uint32_t)1U << 11U)   /**< RP2350 CLK_PERI enable bit */
 
-#define PAD_TX_CONFIG		0x04U			/**< Pad TX drive strength and slew rate */
-#define PAD_RX_CONFIG		0x40U			/**< Pad RX input enable configuration */
+/* Subsystem Reset Bit Positions (RP2350 Datasheet & Peripheral Map) */
+#define RESETS_IO_BANK0_BIT     ((uint32_t)1U << 6U)    /**< Bit 6: IO_BANK0 */
+#define RESETS_PADS_BANK0_BIT   ((uint32_t)1U << 10U)   /**< Bit 10: PADS_BANK0 */
+#define RESETS_RESET_UART0_BIT  ((uint32_t)1U << 26U)   /**< Bit 26: UART0 (RP2350 Hardware Reset Bit) */
+#define RESETS_RESET_UART1_BIT  ((uint32_t)1U << 27U)   /**< Bit 27: UART1 */
 
-#define UART_FR_TXFF_BIT	((uint32_t)1U << 5U)	/**< Transmit FIFO full status bit */
-#define UART_FR_RXFE_BIT	((uint32_t)1U << 4U)	/**< Receive FIFO empty status bit */
+#define GPIO_FUNC_UART          2U                      /**< GPIO multiplexer function 2 (UART) */
 
-#define RESETS_UART0_BIT	RESETS_RESET_UART0_BIT	/**< Alias for UART0 reset bit */
-#define RESETS_ALL_REQUIRED	(RESETS_RESET_UART0_BIT | \
-				 RESETS_IO_BANK0_BIT | \
-				 RESETS_PADS_BANK0_BIT)	/**< Combined RP2350 reset mask (0x10000440U) */
+#define PAD_TX_CONFIG           0x04U                   /**< Pad TX drive strength and slew rate */
+#define PAD_RX_CONFIG           0x40U                   /**< Pad RX input enable configuration */
+
+#define UART_FR_TXFF_BIT        ((uint32_t)1U << 5U)    /**< Transmit FIFO full status bit */
+#define UART_FR_RXFE_BIT        ((uint32_t)1U << 4U)    /**< Receive FIFO empty status bit */
+
+#define RESETS_UART0_BIT        RESETS_RESET_UART0_BIT  /**< Alias for UART0 reset bit */
+#define RESETS_ALL_REQUIRED     (RESETS_RESET_UART0_BIT | \
+                                 RESETS_IO_BANK0_BIT | \
+                                 RESETS_PADS_BANK0_BIT) /**< Combined RP2350 reset mask (0x04000440U) */
 /** @} */
 
 __attribute__((always_inline)) static inline void uart_set_reset(void);
 __attribute__((always_inline)) static inline int uart_reset_wait(void);
 __attribute__((always_inline)) static inline void uart_init_gpio(void);
 __attribute__((always_inline)) static inline void uart_configure(void);
+__attribute__((always_inline)) static inline void uart_set_clk(void);
 
 /**
  * @brief Initializes the UART0 hardware module and associated GPIO lines.

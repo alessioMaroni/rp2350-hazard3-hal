@@ -98,10 +98,17 @@ __attribute__((always_inline)) static inline void uart_configure(void)
 	ASSERT((UART0->UARTCR & 1U) != 0U);
 }
 
+// TODO: Document
+__attribute__((always_inline)) static inline void uart_set_clk(void)
+{
+	CLOCKS->CLK_PERI_CTRL = CLK_PERI_ENABLE_BIT;
+}
+
 int uart_init(void)
 {
 	int ret;
 
+	uart_set_clk();
 	uart_set_reset();
 	ret = uart_reset_wait();
 
